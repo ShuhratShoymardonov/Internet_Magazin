@@ -1,7 +1,42 @@
+import 'dart:convert';
+import 'shop_chorkunja1.dart';
+import 'show_chorkunja2.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class MyShop extends StatelessWidget {
-  const MyShop({super.key});
+class MyShop extends StatefulWidget {
+  const MyShop({Key? key}) : super(key: key);
+
+  @override
+  State<MyShop> createState() => _MyShopState();
+}
+
+class _MyShopState extends State<MyShop> {
+  List<dynamic> products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    try {
+      final response = await http.get(Uri.parse(
+          'https://66854a62b3f57b06dd4c22b1.mockapi.io/getAllgroceries/v1/datas'));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          products = json.decode(response.body);
+        });
+      } else {
+        throw Exception('Failed to load products');
+      }
+    } catch (e) {
+      print('Error fetching products: $e');
+      // Handle error, e.g., show a snackbar or retry logic
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,677 +56,104 @@ class MyShop extends StatelessWidget {
             ),
           ),
         ),
-        body: SingleChildScrollView(
+        body:
+            // products.isEmpty
+            //     ? Center(child: CircularProgressIndicator())
+            //     :
+            SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Exclusive Offer",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "See all",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff53B175),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    SizedBox(width: 15),
-                    Container(
-                      width: 173,
-                      height: 248,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xffE2E2E2),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset("images/pngfuel 1.png"),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Red Apple",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff181725),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    "1kg, Priceg",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff7C7C7C),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "\$4.99",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Color(0xff53B175),
-                                    ),
-                                    child: Icon(Icons.add,
-                                        size: 30, color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Container(
-                      width: 173,
-                      height: 248,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xffE2E2E2),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset("images/pngfuel 1.png"),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Red Apple",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff181725),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    "1kg, Priceg",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff7C7C7C),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "\$4.99",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Color(0xff53B175),
-                                    ),
-                                    child: Icon(Icons.add,
-                                        size: 30, color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Container(
-                      width: 173,
-                      height: 248,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xffE2E2E2),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset("images/pngfuel 1.png"),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Red Apple",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff181725),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    "1kg, Priceg",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff7C7C7C),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "\$4.99",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Color(0xff53B175),
-                                    ),
-                                    child: Icon(Icons.add,
-                                        size: 30, color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Container(
-                      width: 173,
-                      height: 248,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xffE2E2E2),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset("images/pngfuel 1.png"),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Red Apple",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff181725),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    "1kg, Priceg",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff7C7C7C),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "\$4.99",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Color(0xff53B175),
-                                    ),
-                                    child: Icon(Icons.add,
-                                        size: 30, color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Groceries",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "See all",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff53B175),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _buildSectionTitle("Exclusive Offer", () {
+                // Handle "See all" button tap
+              }),
+              _buildHorizontalProductList(products),
+              SizedBox(height: 20),
+              _buildSectionTitle("Groceries", () {
+                // Handle "See all" button tap
+              }),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     SizedBox(width: 10),
-                    Container(
-                      width: 248,
-                      height: 105,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        color: Color.fromARGB(123, 248, 165, 76),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                                "images/4215936-pulses-png-8-png-image-pulses-png-409_409 1.png"),
-                            Text(
-                              "Pulses",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                    ...List.generate(
+                      products.length,
+                      (index) {
+                        return Container(
+                          width: 268,
+                          child: Show_chorkunja2(
+                            image: products[index]['image'],
+                            name: products[index]['name'],
+                          ),
+                        );
+                      },
                     ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 248,
-                      height: 105,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        color: Color.fromARGB(136, 248, 165, 76),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                                "images/4215936-pulses-png-8-png-image-pulses-png-409_409 1.png"),
-                            Text(
-                              "Pulses",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Container(
-                      width: 248,
-                      height: 105,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        color: Color.fromARGB(136, 248, 165, 76),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                                "images/4215936-pulses-png-8-png-image-pulses-png-409_409 1.png"),
-                            Text(
-                              "Pulses",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
                   ],
                 ),
               ),
               SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Best Selling",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "See all",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff53B175),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    SizedBox(width: 15),
-                    Container(
-                      width: 173,
-                      height: 248,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xffE2E2E2),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset(
-                                "images/92f1ea7dcce3b5d06cd1b1418f9b9413 3 (1).png"),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Bell Pepper Red",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff181725),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    "1kg, Priceg",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff7C7C7C),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "\$4.99",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Color(0xff53B175),
-                                    ),
-                                    child: Icon(Icons.add,
-                                        size: 30, color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Container(
-                      width: 173,
-                      height: 248,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xffE2E2E2),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset("images/pngfuel 1.png"),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Red Apple",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff181725),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    "1kg, Priceg",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff7C7C7C),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "\$4.99",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Color(0xff53B175),
-                                    ),
-                                    child: Icon(Icons.add,
-                                        size: 30, color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Container(
-                      width: 173,
-                      height: 248,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xffE2E2E2),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image.asset(
-                                "images/92f1ea7dcce3b5d06cd1b1418f9b9413 3 (1).png"),
-                            Container(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Bell Pepper Red",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color(0xff181725),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Text(
-                                    "1kg, Priceg",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xff7C7C7C),
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "\$4.99",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      color: Color(0xff53B175),
-                                    ),
-                                    child: Icon(Icons.add,
-                                        size: 30, color: Colors.white),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                  ],
-                ),
-              ),
+              _buildSectionTitle("Best Selling", () {
+                // Handle "See all" button tap
+              }),
+              _buildHorizontalProductList(products),
               SizedBox(height: 30),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title, VoidCallback onTap) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          TextButton(
+            onPressed: onTap,
+            child: Text(
+              "See all",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff53B175),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHorizontalProductList(List<dynamic> products) {
+    return Container(
+      height: 248,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.only(left: index == 0 ? 16.0 : 0),
+            child: Container(
+              width: 200,
+              child: shop_chorkunja1(
+                name: products[index]['name'],
+                price: products[index]['price'],
+                image: products[index]['image'],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

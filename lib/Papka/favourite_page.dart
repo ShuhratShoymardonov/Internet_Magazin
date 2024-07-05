@@ -1,7 +1,34 @@
+import 'dart:convert';
+import 'favorite_container_page.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class Favourite extends StatelessWidget {
+class Favourite extends StatefulWidget {
   const Favourite({super.key});
+
+  @override
+  State<Favourite> createState() => _FavouriteState();
+}
+
+class _FavouriteState extends State<Favourite> {
+  List<dynamic> user = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    final response = await http.get(Uri.parse(
+        'https://66854a62b3f57b06dd4c22b1.mockapi.io/getAllgroceries/v1/datas'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        user = json.decode(response.body);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,25 +48,22 @@ class Favourite extends StatelessWidget {
             ),
           ),
         ),
-        body: ListView(
+        body: Column(
           children: [
-            Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: 1,
-                  color: Color(0xffE2E2E2),
+            Container(
+              width: double.infinity,
+              height: 1,
+              color: Color(0xffE2E2E2),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: user.length,
+                itemBuilder: (context, index) => Favorite_container_page(
+                  image: user[index]["image"],
+                  name: user[index]["name"],
+                  narx: user[index]["price"],
                 ),
-                newMethode(),
-                Chiziq(context),
-                newMethode(),
-                Chiziq(context),
-                newMethode(),
-                Chiziq(context),
-                newMethode(),
-                Chiziq(context),
-                newMethode(),
-              ],
+              ),
             ),
           ],
         ),
@@ -68,70 +92,4 @@ class Favourite extends StatelessWidget {
       ),
     );
   }
-}
-
-Container Chiziq(BuildContext context) {
-  return Container(
-    width: MediaQuery.of(context).size.width * 0.88,
-    height: 1,
-    color: Color(0xffE2E2E2),
-  );
-}
-
-Container newMethode() {
-  return Container(
-    width: 363,
-    height: 100,
-    margin: EdgeInsets.all(25),
-    child: Row(
-      children: [
-        Image.asset(
-          "images/92f1ea7dcce3b5d06cd1b1418f9b9413 3 (1).png",
-          width: 80,
-          height: 80,
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sprite Can",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "\$1.99",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Icon(Icons.chevron_right_sharp),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Text(
-                "1kg, Price",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
 }

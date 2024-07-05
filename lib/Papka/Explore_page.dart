@@ -1,7 +1,41 @@
+import 'dart:convert';
+import 'explore_chorkunja.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class Explore extends StatelessWidget {
+class Explore extends StatefulWidget {
   const Explore({super.key});
+
+  @override
+  _ExploreState createState() => _ExploreState();
+}
+
+class _ExploreState extends State<Explore> {
+  List<dynamic> products = [];
+
+  List<Color> colore = [
+    Color.fromARGB(43, 83, 177, 117),
+    Color.fromARGB(74, 139, 83, 83),
+    Color.fromARGB(68, 101, 93, 172),
+    Color.fromARGB(61, 83, 155, 80),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    final response = await http.get(Uri.parse(
+        'https://66854a62b3f57b06dd4c22b1.mockapi.io/getAllgroceries/v1/datas'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        products = json.decode(response.body);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +43,7 @@ class Explore extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Center(
+          title: const Center(
             child: Text(
               "Find Products",
               style: TextStyle(
@@ -19,35 +53,19 @@ class Explore extends StatelessWidget {
             ),
           ),
         ),
-        body: GridView.count(
-          crossAxisCount: 2,
-          children: List.generate(10, (index) {
-            return Center(
-              child: Container(
-                margin: EdgeInsets.all(6),
-                width: 174,
-                height: 189,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: Color(0xff53B175), width: 1),
-                  color: Color.fromARGB(73, 83, 177, 117),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.asset("images/pngfuel 6.png"),
-                    Text(
-                      "Frash Fruits\n & Vegetable",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    )
-                  ],
-                ),
-              ),
+        body: GridView.builder(
+          padding: const EdgeInsets.all(6),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.8,
+          ),
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            return Explore_chorkunja(
+              dane: products[index],
+              colore: colore[index % colore.length],
             );
-          }),
+          },
         ),
       ),
     );
