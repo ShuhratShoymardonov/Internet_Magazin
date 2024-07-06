@@ -34,7 +34,6 @@ class _MyShopState extends State<MyShop> {
       }
     } catch (e) {
       print('Error fetching products: $e');
-      // Handle error, e.g., show a snackbar or retry logic
     }
   }
 
@@ -56,52 +55,40 @@ class _MyShopState extends State<MyShop> {
             ),
           ),
         ),
-        body:
-            // products.isEmpty
-            //     ? Center(child: CircularProgressIndicator())
-            //     :
-            SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30),
-              _buildSectionTitle("Exclusive Offer", () {
-                // Handle "See all" button tap
-              }),
-              _buildHorizontalProductList(products),
-              SizedBox(height: 20),
-              _buildSectionTitle("Groceries", () {
-                // Handle "See all" button tap
-              }),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
+        body: products.isEmpty
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(width: 10),
-                    ...List.generate(
-                      products.length,
-                      (index) {
-                        return Container(
-                          width: 268,
-                          child: Show_chorkunja2(
-                            image: products[index]['image'],
-                            name: products[index]['name'],
-                          ),
-                        );
-                      },
+                    SizedBox(height: 30),
+                    _buildSectionTitle("Exclusive Offer", () {}),
+                    _buildHorizontalProductList(products),
+                    SizedBox(height: 20),
+                    _buildSectionTitle("Groceries", () {}),
+                    Container(
+                      height: 108,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            width: 268,
+                            child: Show_chorkunja2(
+                              image: products[index]['image'],
+                              name: products[index]['name'],
+                            ),
+                          );
+                        },
+                      ),
                     ),
+                    SizedBox(height: 20),
+                    _buildSectionTitle("Best Selling", () {}),
+                    _buildHorizontalProductList(products),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              _buildSectionTitle("Best Selling", () {
-                // Handle "See all" button tap
-              }),
-              _buildHorizontalProductList(products),
-              SizedBox(height: 30),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -145,7 +132,7 @@ class _MyShopState extends State<MyShop> {
           return Padding(
             padding: EdgeInsets.only(left: index == 0 ? 16.0 : 0),
             child: Container(
-              width: 200,
+              width: 173,
               child: shop_chorkunja1(
                 name: products[index]['name'],
                 price: products[index]['price'],

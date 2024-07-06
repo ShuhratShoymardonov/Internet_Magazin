@@ -3,7 +3,6 @@ import 'package:nectar/Papka/MyKart_page.dart';
 import 'package:nectar/Papka/MyShop_page.dart';
 import 'package:nectar/Papka/profil_page.dart';
 import 'package:nectar/Papka/Explore_page.dart';
-import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:nectar/Papka/favourite_page.dart';
 
 class MyHomePage extends StatefulWidget {
