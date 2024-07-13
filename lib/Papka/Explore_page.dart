@@ -61,7 +61,7 @@ class _ExploreState extends State<Explore> {
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {
-            return Explore_chorkunja(
+            return Explore_chorkunja( 
               dane: products[index],
               colore: colore[index % colore.length],
             );
